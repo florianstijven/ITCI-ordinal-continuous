@@ -9,40 +9,66 @@ save_to_appendix = "figures-tables/tables/"
 
 # Load data sets. 
 data("Schizo_BinCont")
-data("ARMD")
-data("Schizo")
-
-
-# Data Exploration
-Schizo_BinCont %>%
-  ggplot()
-
+# Do rowwise deletation of missing observations.
+Schizo_BinCont = Schizo_BinCont %>%
+  na.omit()
 
 # Model Fitting -----------------------------------------------------------
 
-# After ensuring that the data are in the correct format, the survival-survival
-# model is fitted. Models are fitted for different combinations of the number of
-# internal knots and the parametric copula families.
-
 # Four parametric copula families are considered.
 possible_copulas = c("gaussian", "clayton", "frank", "gumbel")
-# 2 through 5 internal knots are considered. The same number of internal knots
-# are considered for each potential outcome, although this can be relaxed.
-possible_nknots = 2:5
+
+# DIFFERENT MARGINAL DISTRIBUTIONS CAN BE SPECIFIED HERE.
+normal_dist = list(
+  function(x, para) {
+    dnorm(x, mean = para[1], sd = para[2])
+  },
+  function(x, para) {
+    pnorm(x, mean = para[1], sd = para[2])
+  },
+  function(p, para) {
+    qnorm(p, mean = para[1], sd = para[2])
+  },
+  n_para = 2,
+  starting_values = c(0, 1)
+)
+marginal_S0 = normal_dist
+marginal_S0[[5]] = c(mean(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == -1]), sd(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == -1]))
+marginal_S1 = normal_dist
+marginal_S1[[5]] = c(mean(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == 1]), sd(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == 1]))
+
 # Construct a tibble with all possible combinations of the number of internal
 # knots and the parametric copula families.
 model_combinations = expand_grid(copula = possible_copulas,
-                                 nknots = possible_nknots)
+                                 marginal_S0 = list(marginal_S0),
+                                 marginal_S1 = list(marginal_S1))
 # Models for all the above combinations are fitted. The fitted models are saved
 # in a column of the tibble.
-fitted_models = model_combinations %>%
-  mutate(fitted_model = purrr::map2(
-    .x = copula,
-    .y = nknots,
-    .f = function(.x, .y) {
-      fit_model_SurvSurv(data, .x, .y)
+data = data.frame(
+  Schizo_BinCont$PANSS,
+  Schizo_BinCont$CGI,
+  ifelse(Schizo_BinCont$Treat == 1, 1, 0)
+)
+fitted_models = model_combinations[1, ] %>%
+  mutate(fitted_model = purrr::pmap(
+    .l = list(
+      copula_family = copula,
+      marginal_S0 = marginal_S0,
+      marginal_S1 = marginal_S1
+    ),
+    .f = function(copula_family, marginal_S0, marginal_S1) {
+      Surrogate:::fit_copula_OrdCont(data = data,
+                                     copula_family = copula_family,
+                                     marginal_S0 = marginal_S0,
+                                     marginal_S1 = marginal_S1,
+                                     K_T = 7,
+                                     start_copula = 0.75)
     }
   ))
+
+plot(fitted_models$fitted_model)
+fitted = fitted_models$fitted_model[[1]]
+Surrogate:::plot.vine_copula_fit(fitted)
 
 # For all fitted models, goodness-of-fit measures are computed and saved into
 # the same tibble. The maximized loglikelihood of the entire identifiable model
