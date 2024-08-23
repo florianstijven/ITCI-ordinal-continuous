@@ -1,0 +1,47 @@
+
+Best fitted model:
+
+Maximum Likelihood Estimate for Vine Copula Model (ordinal-
+Copula Family: frank and frank
+Summary of Maximum Likelihood fit for Treat = 0:
+--------------------------------------------
+Maximum Likelihood estimation
+BHHH maximisation, 14 iterations
+Return code 8: successive function values within relative tolerance limit (reltol)
+Log-Likelihood: -764.8942 
+9  free parameters
+Estimates:
+               Estimate Std. error t value  Pr(> t)    
+True[1]         -1.2760     0.1458  -8.751  < 2e-16 ***
+True[2]         -0.4635     0.1049  -4.419 9.93e-06 ***
+True[3]          0.1338     0.1012   1.322    0.186    
+True[4]          0.6545     0.1150   5.693 1.25e-08 ***
+True[5]          1.1692     0.1523   7.675 1.65e-14 ***
+True[6]          1.9778     0.2735   7.232 4.75e-13 ***
+Surr[1]        -17.7771     2.3340  -7.617 2.60e-14 ***
+Surr[2]         28.0385     1.9235  14.577  < 2e-16 ***
+theta (copula)  10.0033     1.1239   8.901  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+--------------------------------------------
+Summary of Maximum Likelihood fit for Treat = 1:
+--------------------------------------------
+Maximum Likelihood estimation
+BHHH maximisation, 11 iterations
+Return code 8: successive function values within relative tolerance limit (reltol)
+Log-Likelihood: -1855.831 
+9  free parameters
+Estimates:
+                Estimate Std. error t value  Pr(> t)    
+True[1]         -1.25457    0.09011 -13.923  < 2e-16 ***
+True[2]         -0.29372    0.06518  -4.507 6.59e-06 ***
+True[3]          0.41185    0.06289   6.549 5.79e-11 ***
+True[4]          0.76265    0.07323  10.414  < 2e-16 ***
+True[5]          1.24745    0.09397  13.275  < 2e-16 ***
+True[6]          2.14101    0.18030  11.875  < 2e-16 ***
+Surr[1]        -25.84241    1.39996 -18.459  < 2e-16 ***
+Surr[2]         28.38635    1.24173  22.860  < 2e-16 ***
+theta (copula)  10.18172    0.67890  14.997  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+--------------------------------------------

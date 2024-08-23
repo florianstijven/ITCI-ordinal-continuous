@@ -18,7 +18,8 @@ Schizo_BinCont = Schizo_BinCont %>%
 # Four parametric copula families are considered.
 possible_copulas = c("gaussian", "clayton", "frank", "gumbel")
 
-# DIFFERENT MARGINAL DISTRIBUTIONS CAN BE SPECIFIED HERE.
+# We use normal distributions for the marginals of the surrogate (PANNS) because
+# the data exploration did not reveal any significant deviations from normality.
 normal_dist = list(
   function(x, para) {
     dnorm(x, mean = para[1], sd = para[2])
@@ -33,12 +34,13 @@ normal_dist = list(
   starting_values = c(0, 1)
 )
 marginal_S0 = normal_dist
-marginal_S0[[5]] = c(mean(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == -1]), sd(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == -1]))
 marginal_S1 = normal_dist
+# The samples means and standard deviations are used as starting values in each
+# treatment group.
+marginal_S0[[5]] = c(mean(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == -1]), sd(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == -1]))
 marginal_S1[[5]] = c(mean(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == 1]), sd(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == 1]))
 
-# Construct a tibble with all possible combinations of the number of internal
-# knots and the parametric copula families.
+# Construct a tibble with all possible combinations of model characteristics.
 model_combinations = expand_grid(copula = possible_copulas,
                                  marginal_S0 = list(marginal_S0),
                                  marginal_S1 = list(marginal_S1))
@@ -49,61 +51,68 @@ data = data.frame(
   Schizo_BinCont$CGI,
   ifelse(Schizo_BinCont$Treat == 1, 1, 0)
 )
-fitted_models = model_combinations[1, ] %>%
+fitted_models = model_combinations %>%
   mutate(fitted_model = purrr::pmap(
     .l = list(
       copula_family = copula,
       marginal_S0 = marginal_S0,
-      marginal_S1 = marginal_S1
+      marginal_S1 = marginal_S1, 
+      start_copula = c(0.8, 3, 8, 2.6)
     ),
-    .f = function(copula_family, marginal_S0, marginal_S1) {
-      Surrogate:::fit_copula_OrdCont(data = data,
-                                     copula_family = copula_family,
-                                     marginal_S0 = marginal_S0,
-                                     marginal_S1 = marginal_S1,
-                                     K_T = 7,
-                                     start_copula = 0.75)
+    .f = function(copula_family, marginal_S0, marginal_S1, start_copula) {
+      fit_copula_OrdCont(
+        data = data,
+        copula_family = copula_family,
+        marginal_S0 = marginal_S0,
+        marginal_S1 = marginal_S1,
+        K_T = 7,
+        start_copula = start_copula,
+        method = "BHHH"
+      )
     }
   ))
 
-plot(fitted_models$fitted_model)
-fitted = fitted_models$fitted_model[[1]]
-Surrogate:::plot.vine_copula_fit(fitted)
 
 # For all fitted models, goodness-of-fit measures are computed and saved into
 # the same tibble. The maximized loglikelihood of the entire identifiable model
 # is the sum of the loglikelihoods of the two fitted submodels.
 fitted_models = fitted_models %>%
   mutate(
-    LogLik = purrr::map_dbl(
+    loglik0 = purrr::map_dbl(
       .x = fitted_model,
       .f = function(.x) {
-        logLik(.x$fit_0) +
-          logLik(.x$fit_1)
+        logLik(.x$fit_0$ml_fit)
       }
     ),
-    df = 2 * (2 * (nknots + 2) + 1),
-    AIC = -2 * LogLik + 2 * df
+    loglik1 = purrr::map_dbl(
+      .x = fitted_model,
+      .f = function(.x) {
+        logLik(.x$fit_1$ml_fit)
+      }
+    ),
+    loglik = loglik0 + loglik1
   ) %>%
-  arrange(AIC)
+  arrange(-loglik)
 
-# Print summary of all fitted models order from lowest to largest AIC. A lower
-# AIC corresponds to a better fit.
+# Print summary of all fitted models order from largest to lowest maximized
+# loglikelihood. A larger loglikelihood corresponds to a better fit.
 sink(file = paste0(save_to_appendix, "fitted-models.txt")) # Open connection to .txt file to print output to
 cat("Table of fitted models:\n\n")
 print(fitted_models %>%
         mutate(
-          LogLik = num(LogLik, digits = 2),
-          AIC = num(AIC, digits = 2)
+          loglik = num(loglik, digits = 2),
+          loglik0 = num(loglik0, digits = 2),
+          loglik1 = num(loglik1, digits = 2)
         ))
 sink()
 
 
-# The best fitting model, in terms of AIC, is the Gaussian copula model with 2
-# internal knots. This model is extracted from the list of fitted models and
-# named best_fitted_model. Since the fitted_models tibble is already sorted on
-# AIC, the best model is the first one.
-sink(file = "results/best-fitted-model-summary.txt")
+# The best fitting model, in terms of the maximized logelikelihood, is the
+# Frank copula model with normal margins for the surrogate (PANNS). This model
+# is extracted from the list of fitted models and named best_fitted_model. Since
+# the fitted_models tibble is already sorted on maximized loglikelihood, the
+# best model is the first one.
+sink(file = paste0(save_to_appendix, "best-fitted-model-summary.txt"))
 best_fitted_model = fitted_models$fitted_model[[1]]
 # Print summary of the selected model.
 cat("\nBest fitted model:\n\n")
