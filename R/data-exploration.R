@@ -11,7 +11,7 @@ single_height = 8.2
 double_height = 12.8
 res = 600
 
-save_to_figures = "figures-tables/figures/"
+save_to_figures = "figures-tables/figures/data-exploration/"
 save_to_tables = "figures-tables/tables/"
 
 # Load data sets. 

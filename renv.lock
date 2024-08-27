@@ -232,7 +232,7 @@
     },
     "RcppEigen": {
       "Package": "RcppEigen",
-      "Version": "0.3.4.0.1",
+      "Version": "0.3.4.0.2",
       "Source": "Repository",
       "Repository": "RSPM",
       "Requirements": [
@@ -241,7 +241,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "598ee071e758b5f667b0ebe83f5d5085"
+      "Hash": "4ac8e423216b8b70cb9653d1b3f71eb9"
     },
     "RcppParallel": {
       "Package": "RcppParallel",
@@ -299,7 +299,7 @@
       "RemoteRepo": "Surrogate-development",
       "RemoteUsername": "florianstijven",
       "RemoteRef": "ordinal-extensions-ITCI",
-      "RemoteSha": "29841ad513e98f0ce21486036601b98ecac2a09e",
+      "RemoteSha": "ea44db3cf2a5c609111e958d5ab93b880075d618",
       "Requirements": [
         "MASS",
         "MBESS",
@@ -325,7 +325,7 @@
         "tibble",
         "tidyr"
       ],
-      "Hash": "ca2dd00adf18f25d38ce0c5c073ef891"
+      "Hash": "e0e9f05cf562910c8032a5e9cdade218"
     },
     "TH.data": {
       "Package": "TH.data",
@@ -2366,7 +2366,7 @@
     },
     "rms": {
       "Package": "rms",
-      "Version": "6.8-1",
+      "Version": "6.8-2",
       "Source": "Repository",
       "Repository": "RSPM",
       "Requirements": [
@@ -2390,7 +2390,7 @@
         "rpart",
         "survival"
       ],
-      "Hash": "d29b37d0c56e1e63d6dde9dc923d9d91"
+      "Hash": "1677eb26455ea84eef2e51100648147d"
     },
     "rngWELL": {
       "Package": "rngWELL",

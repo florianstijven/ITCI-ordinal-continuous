@@ -1,9 +1,9 @@
 Table of fitted models:
 
 # A tibble: 4 × 7
-  copula   marginal_S0      marginal_S1      fitted_model    loglik   loglik0   loglik1
-  <chr>    <list>           <list>           <list>       <num:.2!> <num:.2!> <num:.2!>
-1 frank    <named list [5]> <named list [5]> <vn_cpl_f>    -2620.72   -764.89  -1855.83
-2 gaussian <named list [5]> <named list [5]> <vn_cpl_f>    -2634.79   -770.15  -1864.63
-3 gumbel   <named list [5]> <named list [5]> <vn_cpl_f>    -2636.04   -770.67  -1865.37
-4 clayton  <named list [5]> <named list [5]> <vn_cpl_f>    -2671.40   -780.02  -1891.39
+  copula   marginal_S0      marginal_S1  fitted_model   loglik0  loglik1  loglik
+  <chr>    <list>           <list>       <list>       <num:.2!> <num:.2> <num:.>
+1 frank    <named list [5]> <named list> <vn_cpl_f>     -764.89 -1855.83 -2.62e3
+2 gaussian <named list [5]> <named list> <vn_cpl_f>     -770.15 -1864.63 -2.63e3
+3 gumbel   <named list [5]> <named list> <vn_cpl_f>     -770.67 -1865.37 -2.64e3
+4 clayton  <named list [5]> <named list> <vn_cpl_f>     -780.02 -1891.39 -2.67e3

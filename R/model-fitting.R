@@ -9,7 +9,7 @@ save_to_appendix = "figures-tables/tables/"
 
 # Load data sets. 
 data("Schizo_BinCont")
-# Do rowwise deletation of missing observations.
+# Do rowwise deletion of missing observations.
 Schizo_BinCont = Schizo_BinCont %>%
   na.omit()
 
