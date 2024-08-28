@@ -87,7 +87,9 @@ Schizo_BinCont_long %>%
       ),
     aes(x = x, y = dens * n * binwidth),
     color = "red"
-  )
+  ) +
+  scale_y_continuous(name = "Count") +
+  scale_x_continuous(name = "Endpoint")
 ggsave(filename = paste0(save_to_figures, "histograms-normal-densities.pdf"),
        device = "pdf",
        width = double_width,
@@ -111,13 +113,17 @@ Schizo_BinCont_long %>%
     cols = vars(Endpoint),
     rows = vars(Treatment),
     scales = "free"
-  )
-ggsave(filename = paste0(save_to_figures, "normal-qq-plots.pdf"),
-       device = "pdf",
-       width = double_width,
-       height = double_height,
-       units = "mm",
-       dpi = res)
+  ) +
+  scale_x_continuous(name = "Theoretical Quantiles") +
+  scale_y_continuous(name = "(Standardized) Sample Quantiles")  
+ggsave(
+  filename = paste0(save_to_figures, "normal-qq-plots.pdf"),
+  device = "pdf",
+  width = double_width,
+  height = double_height,
+  units = "mm",
+  dpi = res
+)
 
 # Normality tests for each setting. The table is printed to a .txt-file.
 sink(file = paste0(save_to_tables, "shapiro-wilk.txt"))

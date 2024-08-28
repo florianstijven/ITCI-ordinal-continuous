@@ -299,7 +299,7 @@
       "RemoteRepo": "Surrogate-development",
       "RemoteUsername": "florianstijven",
       "RemoteRef": "ordinal-extensions-ITCI",
-      "RemoteSha": "ea44db3cf2a5c609111e958d5ab93b880075d618",
+      "RemoteSha": "4ef4766baef56bb290e4845f8f4eb90999434c9b",
       "Requirements": [
         "MASS",
         "MBESS",
@@ -316,7 +316,6 @@
         "msm",
         "nlme",
         "numDeriv",
-        "optimx",
         "pbapply",
         "purrr",
         "rms",
@@ -325,7 +324,7 @@
         "tibble",
         "tidyr"
       ],
-      "Hash": "e0e9f05cf562910c8032a5e9cdade218"
+      "Hash": "30a18d65ef4a6ad0de9b44fd347534a7"
     },
     "TH.data": {
       "Package": "TH.data",
@@ -1984,18 +1983,6 @@
       ],
       "Hash": "bd93354f4a2ee4e096e3d7ad33e08b72"
     },
-    "optimx": {
-      "Package": "optimx",
-      "Version": "2023-10.21",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Requirements": [
-        "nloptr",
-        "numDeriv",
-        "pracma"
-      ],
-      "Hash": "6e83fa2fbad1f00fd3b4ca36598aa23d"
-    },
     "ordinal": {
       "Package": "ordinal",
       "Version": "2023.12-4.1",
@@ -2629,6 +2616,22 @@
         "stats"
       ],
       "Hash": "5c47e84dc0a3ca761ae1d307889e796d"
+    },
+    "sn": {
+      "Package": "sn",
+      "Version": "2.1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "methods",
+        "mnormt",
+        "numDeriv",
+        "quantreg",
+        "stats4",
+        "utils"
+      ],
+      "Hash": "a712c6e210dd94cc2bb947c7c1c48699"
     },
     "statmod": {
       "Package": "statmod",
