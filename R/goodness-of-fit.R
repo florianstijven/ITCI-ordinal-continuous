@@ -120,7 +120,7 @@ gof_plots_ggplot = function(copula_family, fitted_model) {
     geom_point() +
     geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +
     geom_point(aes(y = model_based), color = "red", shape = 15) +
-    scale_x_continuous(breaks = 1:7, name = "True Endpoint (CGI)") +
+    scale_x_continuous(breaks = 1:7, name = expression(paste(T[0], " (CGI)"))) +
     scale_y_continuous(name = "Proportion", lim = c(0, 0.5))
   ggsave(filename = paste0(save_to, "ggplot2/", copula_family, "-", "marginal-gof-t0.pdf"), 
          device = "pdf", 
@@ -140,7 +140,7 @@ gof_plots_ggplot = function(copula_family, fitted_model) {
     geom_point() +
     geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +
     geom_point(aes(y = model_based), color = "red", shape = 15) +
-    scale_x_continuous(breaks = 1:7, name = "True Endpoint (CGI)") +
+    scale_x_continuous(breaks = 1:7, name = expression(paste(T[1], " (CGI)"))) +
     scale_y_continuous(name = "Proportion", lim = c(0, 0.5))
   ggsave(filename = paste0(save_to, "ggplot2/", copula_family, "-", "marginal-gof-t1.pdf"), 
          device = "pdf", 
@@ -163,7 +163,7 @@ gof_plots_ggplot = function(copula_family, fitted_model) {
     geom_histogram(aes(y = after_stat(density)), color = "black", fill = "gray", bins = 15) +
     geom_line(aes(x = grid, y = model_based), data = gof_data_S0, color = "red") +
     scale_y_continuous(name = "Density") +
-    scale_x_continuous(name = "Surrogate Endpoints (PANSS)")
+    scale_x_continuous(name = expression(paste(S[0], " (PANSS)")))
   ggsave(filename = paste0(save_to, "ggplot2/", copula_family, "-", "marginal-gof-s0.pdf"), 
          device = "pdf", 
          width = single_width, 
@@ -184,7 +184,7 @@ gof_plots_ggplot = function(copula_family, fitted_model) {
     geom_histogram(aes(y = after_stat(density)), color = "black", fill = "gray", bins = 15) +
     geom_line(aes(x = grid, y = model_based), data = gof_data_S1, color = "red") +
     scale_y_continuous(name = "Density") +
-    scale_x_continuous(name = "Surrogate Endpoints (PANSS)")
+    scale_x_continuous(name = expression(paste(S[1], " (PANSS)")))
   ggsave(filename = paste0(save_to, "ggplot2/", copula_family, "-", "marginal-gof-s1.pdf"), 
          device = "pdf", 
          width = single_width, 
@@ -202,13 +202,14 @@ gof_plots_ggplot = function(copula_family, fitted_model) {
     ggplot(aes(x = grid, y = observed)) +
     geom_point(aes(x = Y, y = X),
                data = data.frame(fitted_model$fit_0$data),
-               color = "gray") +
+               color = "gray", 
+               alpha = 0.5) +
     geom_line() +
     geom_line(aes(y = lower_ci), linetype = "dashed") +
     geom_line(aes(y = upper_ci), linetype = "dashed") +
     geom_line(aes(y = model_based), color = "red") +
-    scale_x_continuous(name = "Surrogate (PANSS)") +
-    scale_y_continuous(name = "E(T | S)", breaks = 1:7) +
+    scale_x_continuous(name = expression(S[0])) +
+    scale_y_continuous(name = expression(paste(E, paste("(", T[0], "|", S[0], ")"))), breaks = 1:7) +
     coord_cartesian(ylim = c(1, 7))
   ggsave(filename = paste0(save_to, "ggplot2/", copula_family, "-", "association-s0.pdf"), 
          device = "pdf", 
@@ -226,13 +227,14 @@ gof_plots_ggplot = function(copula_family, fitted_model) {
     ggplot(aes(x = grid, y = observed)) +
     geom_point(aes(x = Y, y = X),
                data = data.frame(fitted_model$fit_0$data),
-               color = "gray") +
+               color = "gray",
+               alpha = 0.5) +
     geom_line() +
     geom_line(aes(y = lower_ci), linetype = "dashed") +
     geom_line(aes(y = upper_ci), linetype = "dashed") +
     geom_line(aes(y = model_based), color = "red") +
-    scale_x_continuous(name = "Surrogate (PANSS)") +
-    scale_y_continuous(name = "E(T | S)", breaks = 1:7) +
+    scale_x_continuous(name = expression(paste(S[1], " (PANSS)"))) +
+    scale_y_continuous(name = expression(paste(E, paste("(", T[1], "|", S[1], ")"))), breaks = 1:7) +
     coord_cartesian(ylim = c(1, 7))
   ggsave(filename = paste0(save_to, "ggplot2/", copula_family, "-", "association-s1.pdf"), 
          device = "pdf", 

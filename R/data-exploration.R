@@ -5,12 +5,6 @@ library(Surrogate)
 library(tidyverse)
 
 #specify options for saving the plots to files
-single_width = 9
-double_width = 14
-single_height = 8.2
-double_height = 12.8
-res = 600
-
 save_to_figures = "figures-tables/figures/data-exploration/"
 save_to_tables = "figures-tables/tables/"
 
@@ -98,7 +92,7 @@ ggsave(filename = paste0(save_to_figures, "histograms-normal-densities.pdf"),
        device = "pdf",
        width = double_width,
        height = double_height,
-       units = "cm",
+       units = "mm",
        dpi = res)
 
 # QQ-plots for the z-scores.
@@ -122,7 +116,7 @@ ggsave(filename = paste0(save_to_figures, "normal-qq-plots.pdf"),
        device = "pdf",
        width = double_width,
        height = double_height,
-       units = "cm",
+       units = "mm",
        dpi = res)
 
 # Normality tests for each setting. The table is printed to a .txt-file.
