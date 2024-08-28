@@ -31,19 +31,42 @@ normal_dist = list(
     qnorm(p, mean = para[1], sd = para[2])
   },
   n_para = 2,
-  starting_values = c(0, 1)
+  starting_values = c(-20, 27)
 )
-marginal_S0 = normal_dist
-marginal_S1 = normal_dist
-# The samples means and standard deviations are used as starting values in each
-# treatment group.
-marginal_S0[[5]] = c(mean(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == -1]), sd(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == -1]))
-marginal_S1[[5]] = c(mean(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == 1]), sd(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == 1]))
+# We also use a skewed normal distribution to allow for additional flexibility.
+# xi is the location parameter, omega the scale parameter, and alpha the slant
+# parameter. When alpha = 0, the distribution is normal.
+skewed_normal_dist = list(
+  function(x, para) {
+    sn::dsn(x, xi = para[1], omega = para[2], alpha = para[3])
+  },
+  function(x, para) {
+    sn::psn(x, xi = para[1], omega = para[2], alpha = para[3])
+  },
+  function(p, para) {
+    sn::qsn(p, xi = para[1], omega = para[2], alpha = para[3], tol = 1e-10)
+  },
+  n_para = 3,
+  starting_values = c(15, 35, -1) 
+)
+
+# Put the marginal distribution functions into a list. We assume that the
+# marginal distributions for S_0 and S_1 are of the same form. 
+list_marginal_S0 = list(normal_dist, skewed_normal_dist)
+list_marginal_S1 = list_marginal_S0
+marginals = c("Normal", "Skewed Normal")
+# # The samples means and standard deviations are used as starting values in each
+# # treatment group.
+# list_marginal_S0[[1]][[5]] = c(mean(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == -1]), sd(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == -1]))
+# list_marginal_S1[[1]][[5]] = c(mean(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == 1]), sd(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == 1]))
+# 
+# list_marginal_S0[[2]][[5]] = c(mean(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == -1]), sd(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == -1]), -1)
+# list_marginal_S1[[2]][[5]] = c(mean(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == 1]), sd(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == 1]), -1)
 
 # Construct a tibble with all possible combinations of model characteristics.
 model_combinations = expand_grid(copula = possible_copulas,
-                                 marginal_S0 = list(marginal_S0),
-                                 marginal_S1 = list(marginal_S1))
+                                 marginal_S0 = marginals,
+                                 marginal_S1 = marginals)
 # Models for all the above combinations are fitted. The fitted models are saved
 # in a column of the tibble.
 data = data.frame(
@@ -55,11 +78,22 @@ fitted_models = model_combinations %>%
   mutate(fitted_model = purrr::pmap(
     .l = list(
       copula_family = copula,
-      marginal_S0 = marginal_S0,
-      marginal_S1 = marginal_S1, 
-      start_copula = c(0.8, 3, 8, 2.6)
+      marginal_S0_name = marginal_S0,
+      marginal_S1_name = marginal_S1
     ),
-    .f = function(copula_family, marginal_S0, marginal_S1, start_copula) {
+    .f = function(copula_family, marginal_S0_name, marginal_S1_name) {
+      # The starting value for the copula depends on the parametric copula.
+      start_copula = switch(
+        copula_family,
+        gaussian = 0.8,
+        clayton = 3,
+        frank = 10,
+        gumbel = 2.7
+      )
+      # Select the marginal distirbution functions corresponding to marginal.
+      marginal_S0 = list_marginal_S0[[which(marginal_S0_name == marginals)]]
+      marginal_S1 = list_marginal_S1[[which(marginal_S1_name == marginals)]]
+      # Fit the copula model.
       fit_copula_OrdCont(
         data = data,
         copula_family = copula_family,
@@ -67,7 +101,10 @@ fitted_models = model_combinations %>%
         marginal_S1 = marginal_S1,
         K_T = 7,
         start_copula = start_copula,
-        method = "BHHH"
+        method = "BFGS",
+        finalHessian = "BHHH",
+        control = list(reltol = 1e-9,
+                       iterlim = 2e3)
       )
     }
   ))
@@ -90,9 +127,16 @@ fitted_models = fitted_models %>%
         logLik(.x$fit_1$ml_fit)
       }
     ),
-    loglik = loglik0 + loglik1
+    loglik = loglik0 + loglik1,
+    AIC = purrr::map2_dbl(
+      .x = loglik,
+      .y = fitted_model,
+      .f = function(.x, .y) {
+        2 * (length(coef(.y$fit_0$ml_fit)) + length(coef(.y$fit_1$ml_fit))) - 2 * .x
+      }
+    )
   ) %>%
-  arrange(-loglik)
+  arrange(AIC)
 
 # Print summary of all fitted models order from largest to lowest maximized
 # loglikelihood. A larger loglikelihood corresponds to a better fit.
@@ -100,9 +144,10 @@ sink(file = paste0(save_to_appendix, "fitted-models.txt")) # Open connection to 
 cat("Table of fitted models:\n\n")
 print(fitted_models %>%
         mutate(
-          loglik = num(loglik, digits = 2),
-          loglik0 = num(loglik0, digits = 2),
-          loglik1 = num(loglik1, digits = 2)
+          loglik = num(loglik, digits = 2, notation = "dec"),
+          loglik0 = num(loglik0, digits = 2, notation = "dec"),
+          loglik1 = num(loglik1, digits = 2, notation = "dec"),
+          AIC = num(AIC, digits = 2, notation = "dec")
         ))
 sink()
 

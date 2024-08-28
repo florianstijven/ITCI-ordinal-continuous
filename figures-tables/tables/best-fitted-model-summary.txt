@@ -6,42 +6,43 @@ Copula Family: frank and frank
 Summary of Maximum Likelihood fit for Treat = 0:
 --------------------------------------------
 Maximum Likelihood estimation
-BHHH maximisation, 14 iterations
-Return code 8: successive function values within relative tolerance limit (reltol)
-Log-Likelihood: -764.8942 
-9  free parameters
+BFGS maximization, 47 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -762.2672 
+10  free parameters
 Estimates:
                Estimate Std. error t value  Pr(> t)    
-True[1]         -1.2760     0.1458  -8.751  < 2e-16 ***
-True[2]         -0.4635     0.1049  -4.419 9.93e-06 ***
-True[3]          0.1338     0.1012   1.322    0.186    
-True[4]          0.6545     0.1150   5.693 1.25e-08 ***
-True[5]          1.1692     0.1523   7.675 1.65e-14 ***
-True[6]          1.9778     0.2735   7.232 4.75e-13 ***
-Surr[1]        -17.7771     2.3340  -7.617 2.60e-14 ***
-Surr[2]         28.0385     1.9235  14.577  < 2e-16 ***
-theta (copula)  10.0033     1.1239   8.901  < 2e-16 ***
+True[1]        -1.26763    0.14862  -8.529  < 2e-16 ***
+True[2]        -0.49473    0.10751  -4.602 4.19e-06 ***
+True[3]         0.09659    0.10116   0.955   0.3396    
+True[4]         0.64179    0.10773   5.957 2.56e-09 ***
+True[5]         1.18580    0.14264   8.313  < 2e-16 ***
+True[6]         2.01600    0.26199   7.695 1.42e-14 ***
+Surr[1]        12.12929    4.92050   2.465   0.0137 *  
+Surr[2]        41.61517    5.18361   8.028 9.89e-16 ***
+Surr[3]        -2.38280    0.97531  -2.443   0.0146 *  
+theta (copula)  9.81258    1.12847   8.695  < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 Summary of Maximum Likelihood fit for Treat = 1:
 --------------------------------------------
 Maximum Likelihood estimation
-BHHH maximisation, 11 iterations
-Return code 8: successive function values within relative tolerance limit (reltol)
-Log-Likelihood: -1855.831 
+BFGS maximization, 48 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -1855.83 
 9  free parameters
 Estimates:
                 Estimate Std. error t value  Pr(> t)    
-True[1]         -1.25457    0.09011 -13.923  < 2e-16 ***
-True[2]         -0.29372    0.06518  -4.507 6.59e-06 ***
-True[3]          0.41185    0.06289   6.549 5.79e-11 ***
-True[4]          0.76265    0.07323  10.414  < 2e-16 ***
-True[5]          1.24745    0.09397  13.275  < 2e-16 ***
-True[6]          2.14101    0.18030  11.875  < 2e-16 ***
-Surr[1]        -25.84241    1.39996 -18.459  < 2e-16 ***
-Surr[2]         28.38635    1.24173  22.860  < 2e-16 ***
-theta (copula)  10.18172    0.67890  14.997  < 2e-16 ***
+True[1]         -1.25462    0.09011 -13.924  < 2e-16 ***
+True[2]         -0.29379    0.06517  -4.508 6.55e-06 ***
+True[3]          0.41176    0.06288   6.548 5.84e-11 ***
+True[4]          0.76253    0.07323  10.413  < 2e-16 ***
+True[5]          1.24736    0.09396  13.275  < 2e-16 ***
+True[6]          2.14089    0.18030  11.874  < 2e-16 ***
+Surr[1]        -25.84212    1.39972 -18.462  < 2e-16 ***
+Surr[2]         28.38327    1.24137  22.865  < 2e-16 ***
+theta (copula)  10.18277    0.67886  15.000  < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
