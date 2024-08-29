@@ -1,10 +1,68 @@
-Shapiro-Wilk tests for normality for each endpoint in each treatment group. 
-# A tibble: 6 × 5
-  Treatment    Endpoint variable statistic        p
-  <fct>        <chr>    <chr>        <dbl>    <dbl>
-1 Control      BPRS     value        0.983 1.18e- 1
-2 Experimental BPRS     value        0.995 3.64e- 1
-3 Control      CGI      value        0.943 4.16e- 5
-4 Experimental CGI      value        0.917 3.42e-12
-5 Control      PANSS    value        0.979 4.17e- 2
-6 Experimental PANSS    value        0.993 1.27e- 1
+The following package(s) will be updated in the lockfile:
+
+# CRAN -----------------------------------------------------------------------
+- Surrogate   [florianstijven/Surrogate-development@ordinal-extensions-ITCI -> florianstijven/Surrogate-development@ordinal-extensions-ITCI]
+- sn          [* -> 2.1.1]
+
+# RSPM -----------------------------------------------------------------------
+- optimx      [2023-10.21 -> *]
+
+
+- Lockfile written to "~/Github repos/surrogacy-related/ITCI-ordinal-continuous/renv.lock".
+# A tibble: 16 × 6
+   ranges           range_class         cond_ind copula_family ICA_type         ICA_estimator
+   <list>           <chr>               <lgl>    <chr>         <chr>            <named list> 
+ 1 <named list [2]> Main Assumptions    TRUE     gaussian      R_H              <NULL>       
+ 2 <named list [2]> Main Assumptions    TRUE     gaussian      SICC-transformed <fn>         
+ 3 <named list [2]> Main Assumptions    TRUE     frank         R_H              <NULL>       
+ 4 <named list [2]> Main Assumptions    TRUE     frank         SICC-transformed <fn>         
+ 5 <named list [2]> Main Assumptions    TRUE     gumbel        R_H              <NULL>       
+ 6 <named list [2]> Main Assumptions    TRUE     gumbel        SICC-transformed <fn>         
+ 7 <named list [2]> Main Assumptions    TRUE     clayton       R_H              <NULL>       
+ 8 <named list [2]> Main Assumptions    TRUE     clayton       SICC-transformed <fn>         
+ 9 <named list [2]> Relaxed Assumptions FALSE    gaussian      R_H              <NULL>       
+10 <named list [2]> Relaxed Assumptions FALSE    gaussian      SICC-transformed <fn>         
+11 <named list [2]> Relaxed Assumptions FALSE    frank         R_H              <NULL>       
+12 <named list [2]> Relaxed Assumptions FALSE    frank         SICC-transformed <fn>         
+13 <named list [2]> Relaxed Assumptions FALSE    gumbel        R_H              <NULL>       
+14 <named list [2]> Relaxed Assumptions FALSE    gumbel        SICC-transformed <fn>         
+15 <named list [2]> Relaxed Assumptions FALSE    clayton       R_H              <NULL>       
+16 <named list [2]> Relaxed Assumptions FALSE    clayton       SICC-transformed <fn>         
+# A tibble: 16 × 6
+   ranges           range_class         cond_ind copula_family ICA_type         ICA_estimator
+   <list>           <chr>               <lgl>    <chr>         <chr>            <named list> 
+ 1 <named list [2]> Main Assumptions    TRUE     gaussian      R_H              <NULL>       
+ 2 <named list [2]> Main Assumptions    TRUE     gaussian      SICC-transformed <fn>         
+ 3 <named list [2]> Main Assumptions    TRUE     frank         R_H              <NULL>       
+ 4 <named list [2]> Main Assumptions    TRUE     frank         SICC-transformed <fn>         
+ 5 <named list [2]> Main Assumptions    TRUE     gumbel        R_H              <NULL>       
+ 6 <named list [2]> Main Assumptions    TRUE     gumbel        SICC-transformed <fn>         
+ 7 <named list [2]> Main Assumptions    TRUE     clayton       R_H              <NULL>       
+ 8 <named list [2]> Main Assumptions    TRUE     clayton       SICC-transformed <fn>         
+ 9 <named list [2]> Relaxed Assumptions FALSE    gaussian      R_H              <NULL>       
+10 <named list [2]> Relaxed Assumptions FALSE    gaussian      SICC-transformed <fn>         
+11 <named list [2]> Relaxed Assumptions FALSE    frank         R_H              <NULL>       
+12 <named list [2]> Relaxed Assumptions FALSE    frank         SICC-transformed <fn>         
+13 <named list [2]> Relaxed Assumptions FALSE    gumbel        R_H              <NULL>       
+14 <named list [2]> Relaxed Assumptions FALSE    gumbel        SICC-transformed <fn>         
+15 <named list [2]> Relaxed Assumptions FALSE    clayton       R_H              <NULL>       
+16 <named list [2]> Relaxed Assumptions FALSE    clayton       SICC-transformed <fn>         
+# A tibble: 16 × 6
+   ranges           range_class         cond_ind copula_family ICA_type         ICA_estimator
+   <list>           <chr>               <lgl>    <chr>         <chr>            <named list> 
+ 1 <named list [2]> Main Assumptions    TRUE     gaussian      R_H              <NULL>       
+ 2 <named list [2]> Main Assumptions    TRUE     gaussian      SICC-transformed <fn>         
+ 3 <named list [2]> Main Assumptions    TRUE     frank         R_H              <NULL>       
+ 4 <named list [2]> Main Assumptions    TRUE     frank         SICC-transformed <fn>         
+ 5 <named list [2]> Main Assumptions    TRUE     gumbel        R_H              <NULL>       
+ 6 <named list [2]> Main Assumptions    TRUE     gumbel        SICC-transformed <fn>         
+ 7 <named list [2]> Main Assumptions    TRUE     clayton       R_H              <NULL>       
+ 8 <named list [2]> Main Assumptions    TRUE     clayton       SICC-transformed <fn>         
+ 9 <named list [2]> Relaxed Assumptions FALSE    gaussian      R_H              <NULL>       
+10 <named list [2]> Relaxed Assumptions FALSE    gaussian      SICC-transformed <fn>         
+11 <named list [2]> Relaxed Assumptions FALSE    frank         R_H              <NULL>       
+12 <named list [2]> Relaxed Assumptions FALSE    frank         SICC-transformed <fn>         
+13 <named list [2]> Relaxed Assumptions FALSE    gumbel        R_H              <NULL>       
+14 <named list [2]> Relaxed Assumptions FALSE    gumbel        SICC-transformed <fn>         
+15 <named list [2]> Relaxed Assumptions FALSE    clayton       R_H              <NULL>       
+16 <named list [2]> Relaxed Assumptions FALSE    clayton       SICC-transformed <fn>         
