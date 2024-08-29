@@ -9,4 +9,7 @@ double_height = 128
 between_height = single_height * 1.5 
 res = 600
 
-ggplot2::theme_set(ggplot2::theme_bw())
+if (require(ggplot2)){
+  ggplot2::theme_set(ggplot2::theme_bw())
+}
+
