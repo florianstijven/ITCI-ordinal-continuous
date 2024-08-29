@@ -9,6 +9,8 @@
 
 export OMP_NUM_THREADS=1
 
+module use /apps/leuven/rocky8/skylake/2023a/modules/all
+
 module load GSL
 module load CMake
 module load R/4.4.0-gfbf-2023a
