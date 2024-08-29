@@ -9,14 +9,13 @@
 
 export OMP_NUM_THREADS=1
 
-module use /apps/leuven/rocky8/icelake/2023a/modules/all
-
+module use /apps/leuven/rocky8/icelake/2022b/modules/all
 module load GSL
 module load CMake
-module load R/4.4.0-gfbf-2023a
+module load R/4.3.2-foss-2022b
 
 
-Rscript -e "renv::status()" -e "renv::restore(rebuild = TRUE)" - "renv::status()"
+Rscript -e "renv::status()" -e "renv::restore()" - "renv::status()"
 
 
 
