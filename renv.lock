@@ -131,7 +131,7 @@
     },
     "MASS": {
       "Package": "MASS",
-      "Version": "7.3-59",
+      "Version": "7.3-58",
       "Source": "Repository",
       "Repository": "RSPM",
       "Requirements": [
@@ -142,7 +142,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "26570ae748e78cb2b0f56019dd2ba354"
+      "Hash": "4bf2c61e656bbc238634c798c208d386"
     },
     "MBESS": {
       "Package": "MBESS",
