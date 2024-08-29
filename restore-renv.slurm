@@ -13,7 +13,7 @@ module use /apps/leuven/rocky8/icelake/2023a/modules/all
 
 module load GSL
 module load CMake
-module load R/4.3.3
+module load R/4.4.0-gfbf-2023a
 
 
 Rscript -e "renv::status()" -e "renv::restore()" - "renv::status()"
