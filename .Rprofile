@@ -1,3 +1,9 @@
+# By default renv will try to install binary packages, instead of installing
+# them from source. This can lead to very vague errors like libRlapack.so:
+# cannot open shared object file: No such file or directory. Setting
+# renv.config.ppm.enabled to FALSE should solve these issues.
+options(renv.config.ppm.enabled = FALSE)
+
 source("renv/activate.R")
 
 # Size parameter for saving plots to disk.
