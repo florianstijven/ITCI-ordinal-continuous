@@ -16,7 +16,7 @@ module load CMake
 module load R/4.4.0-gfbf-2023a
 
 
-Rscript -e "renv::status()" -e "renv::restore()" - "renv::status()"
+Rscript -e "renv::status()" -e "renv::restore(rebuild = TRUE)" - "renv::status()"
 
 
 
