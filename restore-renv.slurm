@@ -3,7 +3,7 @@
 #SBATCH --job-name=restore-renv-ordinal-ITCI
 #SBATCH --ntasks=1 --cpus-per-task=2
 #SBATCH --time=00:30:00
-#SBATCH --wice
+#SBATCH --cluster=wice
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH -A lp_doctoralresearch
 
