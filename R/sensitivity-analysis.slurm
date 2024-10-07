@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 #SBATCH --job-name=sensitivity-analysis-ordinal-ITCI
-#SBATCH --ntasks=1 --cpus-per-task=36
+#SBATCH --ntasks=1 --cpus-per-task=72 --nodes=1
 #SBATCH --time=00:30:00
 #SBATCH --cluster=wice
 #SBATCH --mail-type=BEGIN,END,FAIL
@@ -20,7 +20,7 @@ module load R/4.4.0-gfbf-2023a
 cd ..
 
 Rscript -e "renv::restore()" -e "Sys.setenv(TZ='Europe/Brussels')"
-Rscript R/sensitivity-analysis.R 35
+Rscript R/sensitivity-analysis.R 71
 
 
 
