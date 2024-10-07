@@ -16,6 +16,7 @@ library(Surrogate)
 library(dplyr)
 library(tidyr)
 library(copula)
+library(cubature)
 
 # We need the best fitted vine copula model.
 best_fitted_model = readRDS("results/best-fitted-model.rds")

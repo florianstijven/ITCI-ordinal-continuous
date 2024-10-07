@@ -819,6 +819,16 @@
       ],
       "Hash": "859d96e65ef198fd43e82b9628d593ef"
     },
+    "cubature": {
+      "Package": "cubature",
+      "Version": "2.1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "Rcpp"
+      ],
+      "Hash": "ebb09f71a8b5e20c3edeed932c85504a"
+    },
     "curl": {
       "Package": "curl",
       "Version": "5.2.1",
