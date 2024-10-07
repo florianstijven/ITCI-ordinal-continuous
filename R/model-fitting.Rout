@@ -1,0 +1,137 @@
+
+R version 4.4.0 (2024-04-24 ucrt) -- "Puppy Cup"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Setup -------------------------------------------------------------------
+> 
+> # Load the required packages
+> library(Surrogate)
+> library(tidyverse)
+── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+> 
+> save_to_main = "figures-tables/figures/"
+> save_to_appendix = "figures-tables/tables/"
+> 
+> # Load data sets. 
+> data("Schizo_BinCont")
+> # Do rowwise deletion of missing observations.
+> Schizo_BinCont = Schizo_BinCont %>%
++   na.omit()
+> 
+> # Model Fitting -----------------------------------------------------------
+> 
+> # Four parametric copula families are considered.
+> possible_copulas = c("gaussian", "clayton", "frank", "gumbel")
+> 
+> # We use normal distributions for the marginals of the surrogate (PANNS) because
+> # the data exploration did not reveal any significant deviations from normality.
+> normal_dist = list(
++   function(x, para) {
++     dnorm(x, mean = para[1], sd = para[2])
++   },
++   function(x, para) {
++     pnorm(x, mean = para[1], sd = para[2])
++   },
++   function(p, para) {
++     qnorm(p, mean = para[1], sd = para[2])
++   },
++   n_para = 2,
++   starting_values = c(-20, 27)
++ )
+> # We also use a skewed normal distribution to allow for additional flexibility.
+> # xi is the location parameter, omega the scale parameter, and alpha the slant
+> # parameter. When alpha = 0, the distribution is normal.
+> skewed_normal_dist = list(
++   function(x, para) {
++     sn::dsn(x, xi = para[1], omega = para[2], alpha = para[3])
++   },
++   function(x, para) {
++     sn::psn(x, xi = para[1], omega = para[2], alpha = para[3])
++   },
++   function(p, para) {
++     sn::qsn(p, xi = para[1], omega = para[2], alpha = para[3], tol = 1e-10)
++   },
++   n_para = 3,
++   starting_values = c(15, 35, -1) 
++ )
+> 
+> # Put the marginal distribution functions into a list. We assume that the
+> # marginal distributions for S_0 and S_1 are of the same form. 
+> list_marginal_S0 = list(normal_dist, skewed_normal_dist)
+> list_marginal_S1 = list_marginal_S0
+> marginals = c("Normal", "Skewed Normal")
+> # # The samples means and standard deviations are used as starting values in each
+> # # treatment group.
+> # list_marginal_S0[[1]][[5]] = c(mean(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == -1]), sd(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == -1]))
+> # list_marginal_S1[[1]][[5]] = c(mean(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == 1]), sd(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == 1]))
+> # 
+> # list_marginal_S0[[2]][[5]] = c(mean(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == -1]), sd(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == -1]), -1)
+> # list_marginal_S1[[2]][[5]] = c(mean(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == 1]), sd(Schizo_BinCont$PANSS[Schizo_BinCont$Treat == 1]), -1)
+> 
+> # Construct a tibble with all possible combinations of model characteristics.
+> model_combinations = expand_grid(copula = possible_copulas,
++                                  marginal_S0 = marginals,
++                                  marginal_S1 = marginals)
+> # Models for all the above combinations are fitted. The fitted models are saved
+> # in a column of the tibble.
+> data = data.frame(
++   Schizo_BinCont$PANSS,
++   Schizo_BinCont$CGI,
++   ifelse(Schizo_BinCont$Treat == 1, 1, 0)
++ )
+> fitted_models = model_combinations %>%
++   mutate(fitted_model = purrr::pmap(
++     .l = list(
++       copula_family = copula,
++       marginal_S0_name = marginal_S0,
++       marginal_S1_name = marginal_S1
++     ),
++     .f = function(copula_family, marginal_S0_name, marginal_S1_name) {
++       # The starting value for the copula depends on the parametric copula.
++       start_copula = switch(
++         copula_family,
++         gaussian = 0.8,
++         clayton = 3,
++         frank = 10,
++         gumbel = 2.7
++       )
++       # Select the marginal distirbution functions corresponding to marginal.
++       marginal_S0 = list_marginal_S0[[which(marginal_S0_name == marginals)]]
++       marginal_S1 = list_marginal_S1[[which(marginal_S1_name == marginals)]]
++       # Fit the copula model.
++       fit_copula_OrdCont(
++         data = data,
++         copula_family = copula_family,
++         marginal_S0 = marginal_S0,
++         marginal_S1 = marginal_S1,
++         K_T = 7,
++         start_copula = start_copula,
++         method = "BFGS",
++         finalHessian = "BHHH",
++         control = list(reltol = 1e-9,
++                        iterlim = 2e3)
++       )
++     }
++   ))

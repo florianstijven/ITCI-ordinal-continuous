@@ -1,0 +1,174 @@
+
+R version 4.4.0 (2024-04-24 ucrt) -- "Puppy Cup"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+- Project '~/Documents/Github repos/surrogacy-related/ITCI-ordinal-continuous' loaded. [renv 1.0.7]
+Loading required package: ggplot2
+> # Setup -------------------------------------------------------------------
+> 
+> # Load the required packages
+> library(Surrogate)
+> library(tidyverse)
+── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ lubridate 1.9.3     ✔ tibble    3.2.1
+✔ purrr     1.0.2     ✔ tidyr     1.3.1
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+> 
+> #specify options for saving the plots to files
+> save_to_figures = "figures-tables/figures/data-exploration/"
+> save_to_tables = "figures-tables/tables/"
+> 
+> # Load data sets. 
+> data("Schizo_BinCont")
+> # Do rowwise deletation of missing observations.
+> Schizo_BinCont = Schizo_BinCont %>%
++   na.omit()
+> 
+> 
+> # Data Exploration --------------------------------------------------------
+> 
+> # Convert Schizo_BinCont to long format. This makes plotting easier.
+> Schizo_BinCont_long = Schizo_BinCont %>%
++   mutate(Treatment = factor(
++     Treat,
++     levels = c(-1, 1),
++     labels = c("Control", "Experimental")
++   )) %>%
++   pivot_longer(
++     cols = c("PANSS", "BPRS", "CGI"),
++     names_to = "Endpoint",
++     values_to = "value"
++   ) 
+> 
+> # Function to determine separate bin widths for the various endpoints.
+> binwidth_f = function(x) {
++   if (length(unique(x)) < 10) {
++     return(1)
++   }
++   else {
++     return((max(x) - min(x)) / 15)
++   }
++ }
+> 
+> # Plots for the marginal distributions. We also add the estimated normal
+> # densities to highlight the lack of normality. 
+> Schizo_BinCont_long %>%
++   ggplot(aes(x = value)) +
++   geom_histogram(color = "black",
++                  fill = "gray",
++                  binwidth = binwidth_f) +
++   facet_grid(
++     cols = vars(Endpoint),
++     rows = vars(Treatment),
++     scales = "free"
++   ) +
++   # Add estimated normal densities.
++   geom_line(
++     data = Schizo_BinCont_long %>%
++       group_by(Endpoint, Treatment) %>%
++       summarize(
++         mean = mean(value),
++         sd = sd(value),
++         binwidth = binwidth_f(value),
++         n = n()
++       ) %>%
++       ungroup() %>%
++       left_join(
++         Schizo_BinCont_long %>%
++           group_by(Endpoint) %>%
++           summarize(min = min(value), max = max(value))
++       ) %>%
++       rowwise(everything()) %>%
++       reframe(
++         x = seq(
++           from = min,
++           to = max,
++           length.out = 5e2
++         ),
++         dens = dnorm(
++           x = seq(
++             from = min,
++             to = max,
++             length.out = 5e2
++           ),
++           mean = mean,
++           sd = sd
++         )
++       ),
++     aes(x = x, y = dens * n * binwidth),
++     color = "red"
++   ) +
++   scale_y_continuous(name = "Count") +
++   scale_x_continuous(name = "Endpoint")
+`summarise()` has grouped output by 'Endpoint'. You can override using the
+`.groups` argument.
+Joining with `by = join_by(Endpoint)`
+> ggsave(filename = paste0(save_to_figures, "histograms-normal-densities.pdf"),
++        device = "pdf",
++        width = double_width,
++        height = double_height,
++        units = "mm",
++        dpi = res)
+> 
+> # QQ-plots for the z-scores.
+> Schizo_BinCont_long %>%
++   left_join(Schizo_BinCont_long %>%
++               group_by(Endpoint, Treatment) %>%
++               summarize(
++                 mean = mean(value),
++                 sd = sd(value)
++               )) %>%
++   mutate(z_score = (value - mean) / sd) %>%
++   ggplot(aes(sample = z_score)) +
++   geom_qq() +
++   geom_qq_line() +
++   facet_grid(
++     cols = vars(Endpoint),
++     rows = vars(Treatment),
++     scales = "free"
++   ) +
++   scale_x_continuous(name = "Theoretical Quantiles") +
++   scale_y_continuous(name = "(Standardized) Sample Quantiles")  
+`summarise()` has grouped output by 'Endpoint'. You can override using the
+`.groups` argument.
+Joining with `by = join_by(Treatment, Endpoint)`
+> ggsave(
++   filename = paste0(save_to_figures, "normal-qq-plots.pdf"),
++   device = "pdf",
++   width = double_width,
++   height = double_height,
++   units = "mm",
++   dpi = res
++ )
+> 
+> # Normality tests for each setting. The table is printed to a .txt-file.
+> sink(file = paste0(save_to_tables, "shapiro-wilk.txt"))
+> cat("Shapiro-Wilk tests for normality for each endpoint in each treatment group. \n")
+> Schizo_BinCont_long %>%
++   group_by(Endpoint, Treatment) %>%
++   rstatix::shapiro_test(value) 
+> sink()
+> 
+> proc.time()
+   user  system elapsed 
+   5.53    1.70    9.28 

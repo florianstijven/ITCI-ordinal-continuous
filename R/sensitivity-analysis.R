@@ -60,8 +60,9 @@ scenarios_tbl$ICA_estimator[scenarios_tbl$ICA_type == "R_H"] = list(NULL)
 
 # We use a wrapper function for the sensitivity analysis such that we set the
 # same seed for each different version of the sensitivity analysis.
-wrapper_sensitivity_analysis = function(copula_family, lower, upper, ICA_estimator) {
+wrapper_sensitivity_analysis = function(copula_family, lower, upper, ICA_estimator, ncores) {
   set.seed(1)
+  print("try sens analysis")
   sensitivity_analysis_copula(
     fitted_model = best_fitted_model,
     n_sim = n_sim,
@@ -77,14 +78,14 @@ wrapper_sensitivity_analysis = function(copula_family, lower, upper, ICA_estimat
   )
 }
 # Similarly for the uncertainty intervals.
-wrapper_uncertainty_intervals = function(sens_results, ICA_estimator, measure) {
+wrapper_uncertainty_intervals = function(sens_results, ICA_estimator, measure, ncores) {
   set.seed(1)
   # We save some computational time if we do not compute the ICA when we're only
   # looking at Spearman's rho in the full population.
   if (measure == "sp_rho") {
     ICA_estimator = function(x, y) 0
   }
-  
+
   sensitivity_intervals_Dvine(
     fitted_model = best_fitted_model,
     sens_results = sens_results,
@@ -109,7 +110,8 @@ sens_results = purrr::pmap(
     upper = purrr::map(scenarios_tbl$ranges, "upper"),
     ICA_estimator = scenarios_tbl$ICA_estimator
   ),
-  .f = function(...) wrapper_sensitivity_analysis(...)
+  .f = function(...) wrapper_sensitivity_analysis(...),
+  ncores = ncores
 )
 sens_results_tbl = scenarios_tbl
 sens_results_tbl$sens_results = sens_results
@@ -120,13 +122,15 @@ sens_results_tbl$sens_interval_ICA = purrr::map2(
   .x = sens_results_tbl$sens_results,
   .y = sens_results_tbl$ICA_estimator,
   .f = wrapper_uncertainty_intervals, 
-  measure = "ICA"
+  measure = "ICA",
+  ncores = ncores
 )
 sens_results_tbl$sens_interval_sp_rho = purrr::map2(
   .x = sens_results_tbl$sens_results,
   .y = sens_results_tbl$ICA_estimator,
   .f = wrapper_uncertainty_intervals, 
-  measure = "sp_rho"
+  measure = "sp_rho",
+  ncores = ncores
 )
 print(Sys.time() - a)
 

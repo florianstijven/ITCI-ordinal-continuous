@@ -1,0 +1,153 @@
+
+R version 4.4.0 (2024-04-24 ucrt) -- "Puppy Cup"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Setup -------------------------------------------------------------------
+> 
+> # Load the required packages
+> library(Surrogate)
+> library(tidyverse)
+── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+> 
+> save_to = "figures-tables/figures/goodness-of-fit/"
+> 
+> # Load fitted models.
+> fitted_models = readRDS("results/fitted-models.rds")
+> best_fitted_model = readRDS("results/best-fitted-model.rds")
+> 
+> 
+> # Goodness-of-Fit Plots ---------------------------------------------------
+> 
+> ## Default plots produced by the Surrogate functions ----------------------
+> 
+> # The Surrogate packages contains easy-to-use function to produce
+> # goodness-of-fit plots for the fitted copula models. The default option is to
+> # call plot() on the fitted-model object. This will produce all goodness-of-fit
+> # plots. However, to save them one by one, we need to call individual plotting
+> # functions which are currently not exported.
+> 
+> # Function to produce and save the default goodness-of-fit plots.
+> gof_plots_default = function(copula_family, fitted_model, marginal_S0, marginal_S1) {
++   pdf(
++     file = paste0(save_to, "default/", copula_family, "/", marginal_S0, "-", marginal_S1, "-", "marginal-gof-t0.pdf"),
++     width = between_width,
++     height = between_height
++   )
++   par(mar = c(3.5, 3.5, 1, 1), oma = c(0, 0, 0, 0), mgp = c(2, 1, 0))
++   Surrogate:::marginal_gof_copula(
++     marginal = fitted_model$fit_0$marginal_X,
++     observed = fitted_model$fit_0$data$X,
++     name = "True Endpoint",
++     treat = 0,
++     type = "ordinal"
++   )
++   dev.off()
++   
++   pdf(file = paste0(save_to, "default/", copula_family, "/", marginal_S0, "-", marginal_S1, "-", "marginal-gof-t1.pdf"), width = between_width, height = between_height)
++   par(mar = c(3.5, 3.5, 1, 1), oma = c(0, 0, 0, 0), mgp = c(2, 1, 0))
++   Surrogate:::marginal_gof_copula(
++     marginal = fitted_model$fit_1$marginal_X,
++     observed = fitted_model$fit_1$data$X,
++     name = "True Endpoint",
++     treat = 1,
++     type = "ordinal"
++   )
++   dev.off()
++   
++   pdf(
++     file = paste0(save_to, "default/", copula_family, "/", marginal_S0, "-", marginal_S1, "-", "marginal-gof-s0.pdf"),
++     width = between_width,
++     height = between_height
++   )
++   par(mar = c(3.5, 3.5, 1, 1), oma = c(0, 0, 0, 0), mgp = c(2, 1, 0))
++   Surrogate:::marginal_gof_copula(
++     marginal = fitted_model$fit_0$marginal_Y,
++     observed = fitted_model$fit_0$data$Y,
++     name = "Surrogate",
++     treat = 0,
++     type = "continuous"
++   )
++   dev.off()
++   
++   pdf(file = paste0(save_to, "default/", copula_family, "/", marginal_S0, "-", marginal_S1, "-", "marginal-gof-s1.pdf"), width = between_width, height = between_height)
++   par(mar = c(3.5, 3.5, 1, 1), oma = c(0, 0, 0, 0), mgp = c(2, 1, 0))
++   Surrogate:::marginal_gof_copula(
++     marginal = fitted_model$fit_1$marginal_Y,
++     observed = fitted_model$fit_1$data$Y,
++     name = "Surrogate",
++     treat = 1,
++     type = "continuous"
++   )
++   dev.off()
++   
++   pdf(file = paste0(save_to, "default/", copula_family, "/", marginal_S0, "-", marginal_S1, "-", "association-gof0.pdf"), width = between_width, height = between_height)
++   par(mar = c(3.5, 3.5, 1, 1), oma = c(0, 0, 0, 0), mgp = c(2, 1, 0))
++   Surrogate:::association_gof_copula(
++     fitted_submodel = fitted_model$fit_0,
++     treat = 0,
++     endpoint_types = c("ordinal", "continuous")
++   )
++   dev.off()
++   
++   pdf(file = paste0(save_to, "default/", copula_family, "/", marginal_S0, "-", marginal_S1, "-", "association-gof1.pdf"), width = between_width, height = between_height)
++   par(mar = c(3.5, 3.5, 1, 1), oma = c(0, 0, 0, 0), mgp = c(2, 1, 0))
++   Surrogate:::association_gof_copula(
++     fitted_submodel = fitted_model$fit_1,
++     treat = 1,
++     endpoint_types = c("ordinal", "continuous")
++   )
++   dev.off()
++ }
+> 
+> # Produce all goodness-of-fit plots for the fitted models.
+> fitted_models %>%
++   group_by(copula, marginal_S0, marginal_S1) %>%
++   summarize(gof_plots_default(copula, fitted_model[[1]], marginal_S0, marginal_S1))
+Error in `summarize()`:
+ℹ In argument: `gof_plots_default(copula, fitted_model[[1]],
+  marginal_S0, marginal_S1)`.
+ℹ In group 1: `copula = "clayton"`, `marginal_S0 = "Normal"`, `marginal_S1 =
+  "Normal"`.
+Caused by error in `gof_plots_default()`:
+! object 'between_width' not found
+Backtrace:
+     ▆
+  1. ├─... %>% ...
+  2. ├─dplyr::summarize(...)
+  3. ├─dplyr:::summarise.grouped_df(...)
+  4. │ └─dplyr:::summarise_cols(.data, dplyr_quosures(...), by, "summarise")
+  5. │   ├─base::withCallingHandlers(...)
+  6. │   └─dplyr:::map(quosures, summarise_eval_one, mask = mask)
+  7. │     └─base::lapply(.x, .f, ...)
+  8. │       └─dplyr (local) FUN(X[[i]], ...)
+  9. │         └─mask$eval_all_summarise(quo)
+ 10. │           └─dplyr (local) eval()
+ 11. ├─global gof_plots_default(copula, fitted_model[[1]], marginal_S0, marginal_S1)
+ 12. │ └─grDevices::pdf(...)
+ 13. └─base::.handleSimpleError(...)
+ 14.   └─dplyr (local) h(simpleError(msg, call))
+ 15.     └─dplyr (local) handler(cnd)
+ 16.       └─rlang::abort(message, class = error_class, parent = parent, call = error_call)
+Execution halted
