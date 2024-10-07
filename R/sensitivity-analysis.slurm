@@ -14,8 +14,13 @@ module load GSL
 module load CMake
 module load R/4.4.0-gfbf-2023a
 
+# This slurm file is located in ./R. This causes issues with renv because renv 
+# expects scripts to be executed from the root directory. We therefore first go
+# back to the root directory, from where we run the scripts. 
+cd ..
+
 Rscript -e "renv::restore()" -e "Sys.setenv(TZ='Europe/Brussels')"
-Rscript sensitivity-analysis.R 72
+Rscript R/sensitivity-analysis.R 72
 
 
 
