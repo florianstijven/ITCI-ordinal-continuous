@@ -1,4 +1,3 @@
-
 #!/usr/bin/env Rscript
 args = commandArgs(trailingOnly=TRUE)
 print(args)
@@ -52,7 +51,7 @@ scenarios_tbl = scenarios_tbl %>%
       (1 - exp(-2 * mutinfo)) / (1 - exp(-2 * H_DeltaT))
     }
   )))
-# ICA_estimator is set to NULL for R_H. The default ICA definition(i.e., the
+# ICA_estimator is set to NULL for R_H. The default ICA definition (i.e., the
 # definition for R_H) will then be used.
 scenarios_tbl$ICA_estimator[scenarios_tbl$ICA_type == "R_H"] = list(NULL)
 
@@ -60,7 +59,7 @@ scenarios_tbl$ICA_estimator[scenarios_tbl$ICA_type == "R_H"] = list(NULL)
 
 # We use a wrapper function for the sensitivity analysis such that we set the
 # same seed for each different version of the sensitivity analysis.
-wrapper_sensitivity_analysis = function(cond_ind, copula_family, lower, upper, ICA_estimator) {
+wrapper_sensitivity_analysis = function(copula_family, lower, upper, ICA_estimator) {
   set.seed(1)
   sensitivity_analysis_copula(
     fitted_model = best_fitted_model,
@@ -104,7 +103,6 @@ wrapper_uncertainty_intervals = function(sens_results, ICA_estimator, measure) {
 a = Sys.time()
 sens_results = purrr::pmap(
   .l = list(
-    cond_ind = scenarios_tbl$cond_ind,
     copula_family = scenarios_tbl$copula_family,
     lower = purrr::map(scenarios_tbl$ranges, "lower"),
     upper = purrr::map(scenarios_tbl$ranges, "upper"),
