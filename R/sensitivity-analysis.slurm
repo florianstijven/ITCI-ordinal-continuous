@@ -20,7 +20,7 @@ module load R/4.4.0-gfbf-2023a
 cd ..
 
 Rscript -e "renv::restore()" -e "Sys.setenv(TZ='Europe/Brussels')"
-Rscript R/sensitivity-analysis.R 72
+Rscript R/sensitivity-analysis.R 35
 
 
 
