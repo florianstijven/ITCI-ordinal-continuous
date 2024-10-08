@@ -7,12 +7,10 @@ options(renv.config.ppm.enabled = FALSE)
 source("renv/activate.R")
 
 # Size parameter for saving plots to disk.
-single_width = 61
+single_width = 90
 double_width = 140
-between_width = single_width * 1.5
-single_height = 55
+single_height = 82
 double_height = 128
-between_height = single_height * 1.5 
 res = 600
 
 # Check whether ggplot2 is installed. If yes, system.file() returns the

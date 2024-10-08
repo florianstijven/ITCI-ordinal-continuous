@@ -1,0 +1,34 @@
+================================================================================
+
+ICA = R_H 
+
+Sensitivity analysis based on the D-vine copula model
+
+Identifiable Copula Family (c12 and c34): 
+Unidentifiable Copula Family (c23, c13_2, c24_3, and c14_23): frank frank frank frank
+
+
+Estimated interval of ignorance: (0.024, 0.268)
+Interval of uncertainty (pointwise): (0.019, 0.284)
+Interval of uncertainty (strong): (0.018, 0.289)
+alpha = 0.05
+
+================================================================================
+
+================================================================================
+
+ICA = Standardized SICC 
+
+Sensitivity analysis based on the D-vine copula model
+
+Identifiable Copula Family (c12 and c34): 
+Unidentifiable Copula Family (c23, c13_2, c24_3, and c14_23): frank frank frank frank
+
+
+Estimated interval of ignorance: (0.075, 0.618)
+Interval of uncertainty (pointwise): (0.062, 0.643)
+Interval of uncertainty (strong): (0.059, 0.652)
+alpha = 0.05
+
+================================================================================
+

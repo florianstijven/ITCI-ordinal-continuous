@@ -135,3 +135,67 @@ Type 'q()' to quit R.
 +       )
 +     }
 +   ))
+> 
+> 
+> # For all fitted models, goodness-of-fit measures are computed and saved into
+> # the same tibble. The maximized loglikelihood of the entire identifiable model
+> # is the sum of the loglikelihoods of the two fitted submodels.
+> fitted_models = fitted_models %>%
++   mutate(
++     loglik0 = purrr::map_dbl(
++       .x = fitted_model,
++       .f = function(.x) {
++         logLik(.x$fit_0$ml_fit)
++       }
++     ),
++     loglik1 = purrr::map_dbl(
++       .x = fitted_model,
++       .f = function(.x) {
++         logLik(.x$fit_1$ml_fit)
++       }
++     ),
++     loglik = loglik0 + loglik1,
++     AIC = purrr::map2_dbl(
++       .x = loglik,
++       .y = fitted_model,
++       .f = function(.x, .y) {
++         2 * (length(coef(.y$fit_0$ml_fit)) + length(coef(.y$fit_1$ml_fit))) - 2 * .x
++       }
++     )
++   ) %>%
++   arrange(AIC)
+> 
+> # Print summary of all fitted models order from largest to lowest maximized
+> # loglikelihood. A larger loglikelihood corresponds to a better fit.
+> sink(file = paste0(save_to_appendix, "fitted-models.txt")) # Open connection to .txt file to print output to
+> cat("Table of fitted models:\n\n")
+> print(fitted_models %>%
++         mutate(
++           loglik = num(loglik, digits = 2, notation = "dec"),
++           loglik0 = num(loglik0, digits = 2, notation = "dec"),
++           loglik1 = num(loglik1, digits = 2, notation = "dec"),
++           AIC = num(AIC, digits = 2, notation = "dec")
++         ))
+> sink()
+> 
+> 
+> # The best fitting model, in terms of the maximized logelikelihood, is the
+> # Frank copula model with normal margins for the surrogate (PANNS). This model
+> # is extracted from the list of fitted models and named best_fitted_model. Since
+> # the fitted_models tibble is already sorted on maximized loglikelihood, the
+> # best model is the first one.
+> sink(file = paste0(save_to_appendix, "best-fitted-model-summary.txt"))
+> best_fitted_model = fitted_models$fitted_model[[1]]
+> # Print summary of the selected model.
+> cat("\nBest fitted model:\n\n")
+> best_fitted_model
+> sink() # Close connection to .txt file.
+> 
+> # Saving Results ----------------------------------------------------------
+> 
+> saveRDS(fitted_models, file = "results/fitted-models.rds")
+> saveRDS(best_fitted_model, file = "results/best-fitted-model.rds")
+> 
+> proc.time()
+   user  system elapsed 
+ 696.18    8.35  705.03 

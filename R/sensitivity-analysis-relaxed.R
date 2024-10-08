@@ -6,7 +6,7 @@ print(args)
 
 ncores = as.integer(args[1])
 # Number of MC replications in the sensitivity analysis
-n_sim = 500
+n_sim = 2000
 # Number of MC samples for computing the ICA and related measures.
 n_prec = 5e3
 # Number of bootstrap replications for computing uncertainty intervals.

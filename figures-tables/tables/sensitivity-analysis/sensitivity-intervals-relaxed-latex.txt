@@ -1,0 +1,90 @@
+================================================================================
+
+Intervals for sensitivity analyses under relaxed assumptions for ICA = R_H or standardized SICC 
+
+
+\begin{tabular}{l|l|l|l|l}
+\hline
+range\_class & copula\_family & ICA\_type & Est. II & UI (pointwise)\\
+\hline
+Main Assumptions & gaussian & R\_H & (0.03, 0.3) & (0.02, 0.32)\\
+\hline
+Main Assumptions & gaussian & SICC-transformed & (0.08, 0.66) & (0.06, 0.68)\\
+\hline
+Main Assumptions & frank & R\_H & (0.03, 0.27) & (0.02, 0.29)\\
+\hline
+Main Assumptions & frank & SICC-transformed & (0.08, 0.63) & (0.07, 0.65)\\
+\hline
+Main Assumptions & gumbel & R\_H & (0.03, 0.3) & (0.02, 0.32)\\
+\hline
+Main Assumptions & gumbel & SICC-transformed & (0.08, 0.65) & (0.06, 0.68)\\
+\hline
+Main Assumptions & clayton & R\_H & (0.04, 0.31) & (0.03, 0.32)\\
+\hline
+Main Assumptions & clayton & SICC-transformed & (0.12, 0.68) & (0.09, 0.7)\\
+\hline
+Relaxed Assumptions & gaussian & R\_H & (0, 0.37) & (0, 0.39)\\
+\hline
+Relaxed Assumptions & gaussian & SICC-transformed & (0.01, 0.75) & (0.01, 0.77)\\
+\hline
+Relaxed Assumptions & frank & R\_H & (0.01, 0.35) & (0.01, 0.36)\\
+\hline
+Relaxed Assumptions & frank & SICC-transformed & (0.02, 0.73) & (0.02, 0.75)\\
+\hline
+Relaxed Assumptions & gumbel & R\_H & (0.01, 0.38) & (0.01, 0.4)\\
+\hline
+Relaxed Assumptions & gumbel & SICC-transformed & (0.02, 0.76) & (0.02, 0.78)\\
+\hline
+Relaxed Assumptions & clayton & R\_H & (0.01, 0.37) & (0.01, 0.38)\\
+\hline
+Relaxed Assumptions & clayton & SICC-transformed & (0.03, 0.76) & (0.03, 0.77)\\
+\hline
+\end{tabular}
+
+================================================================================
+
+================================================================================
+
+Intervals for sensitivity analyses under relaxed assumptions for sp_rho 
+
+
+\begin{tabular}{l|l|l|l|l}
+\hline
+range\_class & copula\_family & ICA\_type & Est. II, sp\_rho & UI (pointwise), sp\_rho\\
+\hline
+Main Assumptions & gaussian & R\_H & (0.26, 0.8) & (0.2, 0.81)\\
+\hline
+Main Assumptions & gaussian & SICC-transformed & (0.26, 0.8) & (0.2, 0.81)\\
+\hline
+Main Assumptions & frank & R\_H & (0.25, 0.78) & (0.2, 0.79)\\
+\hline
+Main Assumptions & frank & SICC-transformed & (0.25, 0.78) & (0.2, 0.79)\\
+\hline
+Main Assumptions & gumbel & R\_H & (0.25, 0.79) & (0.19, 0.81)\\
+\hline
+Main Assumptions & gumbel & SICC-transformed & (0.25, 0.79) & (0.19, 0.81)\\
+\hline
+Main Assumptions & clayton & R\_H & (0.27, 0.8) & (0.21, 0.81)\\
+\hline
+Main Assumptions & clayton & SICC-transformed & (0.27, 0.8) & (0.21, 0.81)\\
+\hline
+Relaxed Assumptions & gaussian & R\_H & (0.04, 0.86) & (-0.05, 0.87)\\
+\hline
+Relaxed Assumptions & gaussian & SICC-transformed & (0.04, 0.86) & (-0.05, 0.87)\\
+\hline
+Relaxed Assumptions & frank & R\_H & (0.02, 0.84) & (-0.04, 0.85)\\
+\hline
+Relaxed Assumptions & frank & SICC-transformed & (0.02, 0.84) & (-0.04, 0.85)\\
+\hline
+Relaxed Assumptions & gumbel & R\_H & (0.02, 0.86) & (-0.06, 0.87)\\
+\hline
+Relaxed Assumptions & gumbel & SICC-transformed & (0.02, 0.86) & (-0.06, 0.87)\\
+\hline
+Relaxed Assumptions & clayton & R\_H & (0.05, 0.86) & (-0.03, 0.87)\\
+\hline
+Relaxed Assumptions & clayton & SICC-transformed & (0.05, 0.86) & (-0.03, 0.87)\\
+\hline
+\end{tabular}
+
+================================================================================
+

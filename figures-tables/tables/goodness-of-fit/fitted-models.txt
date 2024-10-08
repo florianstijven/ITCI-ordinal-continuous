@@ -1,0 +1,21 @@
+Table of fitted models:
+
+# A tibble: 16 × 8
+   copula marginal_S0 marginal_S1 fitted_model loglik0  loglik1   loglik     AIC
+   <chr>  <chr>       <chr>       <list>       <dec:.> <dec:.2> <dec:.2> <dec:.>
+ 1 frank  Skewed Nor… Normal      <vn_cpl_f>   -762.27 -1855.83 -2618.10 5274.20
+ 2 frank  Skewed Nor… Skewed Nor… <vn_cpl_f>   -762.27 -1855.83 -2618.10 5276.20
+ 3 frank  Normal      Normal      <vn_cpl_f>   -764.89 -1855.83 -2620.72 5277.45
+ 4 frank  Normal      Skewed Nor… <vn_cpl_f>   -764.89 -1855.83 -2620.72 5279.45
+ 5 gauss… Skewed Nor… Normal      <vn_cpl_f>   -767.16 -1864.63 -2631.79 5301.59
+ 6 gauss… Skewed Nor… Skewed Nor… <vn_cpl_f>   -767.16 -1864.63 -2631.79 5303.59
+ 7 gauss… Normal      Normal      <vn_cpl_f>   -770.15 -1864.63 -2634.79 5305.57
+ 8 gauss… Normal      Skewed Nor… <vn_cpl_f>   -770.15 -1864.63 -2634.79 5307.57
+ 9 gumbel Normal      Normal      <vn_cpl_f>   -770.67 -1865.37 -2636.04 5308.08
+10 gumbel Skewed Nor… Normal      <vn_cpl_f>   -770.60 -1865.37 -2635.97 5309.93
+11 gumbel Normal      Skewed Nor… <vn_cpl_f>   -770.67 -1865.37 -2636.04 5310.08
+12 gumbel Skewed Nor… Skewed Nor… <vn_cpl_f>   -770.60 -1865.37 -2635.97 5311.93
+13 clayt… Skewed Nor… Normal      <vn_cpl_f>   -769.83 -1891.39 -2661.22 5360.44
+14 clayt… Skewed Nor… Skewed Nor… <vn_cpl_f>   -769.83 -1891.39 -2661.22 5362.44
+15 clayt… Normal      Normal      <vn_cpl_f>   -780.02 -1891.39 -2671.40 5378.81
+16 clayt… Normal      Skewed Nor… <vn_cpl_f>   -780.02 -1891.39 -2671.40 5380.81

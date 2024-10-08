@@ -2,7 +2,7 @@
 #
 #SBATCH --job-name=sensitivity-analysis-ordinal-ITCI
 #SBATCH --ntasks=1 --cpus-per-task=72 --nodes=1
-#SBATCH --time=05:00:00
+#SBATCH --time=12:00:00
 #SBATCH --cluster=wice
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH -A lp_doctoralresearch

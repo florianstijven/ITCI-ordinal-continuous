@@ -331,7 +331,7 @@
       "RemoteRepo": "Surrogate-development",
       "RemoteUsername": "florianstijven",
       "RemoteRef": "ordinal-extensions-ITCI",
-      "RemoteSha": "d26bc03b074b48b080910e89c1c9610243dc2b81",
+      "RemoteSha": "9c50c7fea0a50ccd880e51eea614cd84e2d785d2",
       "Requirements": [
         "MASS",
         "MBESS",
@@ -356,7 +356,7 @@
         "tibble",
         "tidyr"
       ],
-      "Hash": "4c4c001db5fe04ea6dd2f30bddfe7d4e"
+      "Hash": "98bf252149d7ed8663d5fae44bcd4273"
     },
     "TH.data": {
       "Package": "TH.data",
