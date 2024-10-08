@@ -6,11 +6,11 @@ print(args)
 
 ncores = as.integer(args[1])
 # Number of MC replications in the sensitivity analysis
-n_sim = 50
+n_sim = 500
 # Number of MC samples for computing the ICA and related measures.
 n_prec = 5e3
 # Number of bootstrap replications for computing uncertainty intervals.
-B = 50
+B = 500
 
 library(Surrogate)
 library(dplyr)
@@ -42,8 +42,11 @@ scenarios_tbl = expand_grid(
   copula_family = c("gaussian", "frank", "gumbel", "clayton"),
   ICA_type = c("R_H", "SICC-transformed")
 )
-# The SICC can be replaced with any measure by replacing the mutual information
-# estimator with an estimator of -0.5 * log(1 - measure).
+# The SICC can be replaced with any other measure through the ICA_estimator
+# argument of sensitivity_analysis_copula(). One can specify functions that
+# estimate the ICA (whatever the definition) given a sample from (Delta S, Delta
+# T). constructor_ICA_estimator() allows for constructing such functions based
+# on information-theoretic quantities.
 scenarios_tbl = scenarios_tbl %>%
   mutate(ICA_estimator = list(endpoint_types = constructor_ICA_estimator(
     c("ordinal", "continuous"),
@@ -62,7 +65,6 @@ scenarios_tbl$ICA_estimator[scenarios_tbl$ICA_type == "R_H"] = list(NULL)
 # same seed for each different version of the sensitivity analysis.
 wrapper_sensitivity_analysis = function(copula_family, lower, upper, ICA_estimator, ncores) {
   set.seed(1)
-  print("try sens analysis")
   sensitivity_analysis_copula(
     fitted_model = best_fitted_model,
     n_sim = n_sim,
