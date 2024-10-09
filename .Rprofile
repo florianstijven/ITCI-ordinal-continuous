@@ -19,3 +19,9 @@ if (system.file(package = "ggplot2") != ""){
   ggplot2::theme_set(ggplot2::theme_bw())
 }
 
+# WORKAROUND: https://github.com/rstudio/rstudio/issues/6692
+# Revert to 'sequential' setup of PSOCK cluster in R 4.0.0
+if (getRversion() >= "4.0.0") {
+  parallel:::setDefaultClusterOptions(setup_strategy = "sequential")
+}
+
